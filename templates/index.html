@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yandex Music → Spotify Transfer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Yandex Music → Spotify</h1>
+            <p class="subtitle">Перенесите плейлист «Мне нравится» из Яндекс Музыки в Spotify</p>
+        </header>
+
+        <main>
+            <!-- Сообщения об ошибках и успехе -->
+            <div id="message" class="message hidden"></div>
+
+            <!-- Шаг 1: Авторизация Spotify -->
+            <div class="step" id="step-spotify">
+                <h2>Шаг 1: Авторизация в Spotify</h2>
+                <p>Нажмите кнопку ниже, чтобы авторизоваться через Spotify. Это необходимо для создания плейлиста в вашем аккаунте.</p>
+                <button id="spotify-auth-btn" class="btn btn-primary" onclick="authorizeSpotify()">
+                    Авторизоваться через Spotify
+                </button>
+                <div id="spotify-status" class="status hidden"></div>
+            </div>
+
+            <!-- Шаг 2: Токен Яндекс -->
+            <div class="step" id="step-yandex">
+                <h2>Шаг 2: Токен Яндекс Музыки</h2>
+                <p>Вставьте ваш токен Яндекс Музыки. Вы можете получить его через расширение браузера или DevTools.</p>
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="yandex-token" 
+                        placeholder="Вставьте токен Яндекс Музыки здесь..."
+                        class="input-token"
+                    >
+                    <small class="hint">
+                        <strong>Как получить токен:</strong><br>
+                        1. Откройте <a href="https://music.yandex.ru" target="_blank">music.yandex.ru</a><br>
+                        2. Откройте DevTools (F12) → Network<br>
+                        3. Найдите любой запрос к api.music.yandex.net<br>
+                        4. Скопируйте значение заголовка "Authorization: OAuth ..." (без слова "OAuth")
+                    </small>
+                </div>
+            </div>
+
+            <!-- Шаг 3: Перенос -->
+            <div class="step" id="step-transfer">
+                <h2>Шаг 3: Перенос плейлиста</h2>
+                <p>Когда вы готовы, нажмите кнопку ниже для начала переноса.</p>
+                <button id="transfer-btn" class="btn btn-success" onclick="transferPlaylist()">
+                    Перенести плейлист
+                </button>
+            </div>
+
+            <!-- Прогресс -->
+            <div id="progress-container" class="progress-container hidden">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <p id="progress-text" class="progress-text">Обработка...</p>
+            </div>
+
+            <!-- Результаты -->
+            <div id="results" class="results hidden">
+                <div class="result-success">
+                    <h3>✅ Перенос завершён успешно!</h3>
+                    <p>Ваш плейлист создан в Spotify:</p>
+                    <a id="playlist-link" href="#" target="_blank" class="btn btn-link">Открыть плейлист в Spotify</a>
+                    
+                    <div class="stats">
+                        <p><strong>Всего треков:</strong> <span id="total-tracks">0</span></p>
+                        <p><strong>Найдено в Spotify:</strong> <span id="found-tracks">0</span></p>
+                        <p><strong>Не найдено:</strong> <span id="not-found-count">0</span></p>
+                    </div>
+                </div>
+
+                <div id="not-found-tracks" class="not-found-tracks hidden">
+                    <h4>Треки, которые не удалось найти в Spotify:</h4>
+                    <ul id="not-found-list"></ul>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>⚠️ Все токены обрабатываются только в памяти и не сохраняются на сервере</p>
+            <p>🔒 Используется HTTPS для безопасной передачи данных</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
+
